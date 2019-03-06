@@ -12,12 +12,12 @@ PROGRAM = glutapp
 # OPTFLAGS = -g  # for debug
 OPTFLAGS =
 CC       = g++
-CFLAGS   = -w $(OPTFLAGS)
+CFLAGS   = -w $(OPTFLAGS) -std=c++11 -ISOIL/src
 
 ifeq ($(strip $(OS)),Darwin)
 	LDFLAGS = -framework GLUT -framework OpenGL
 else
-	LDFLAGS = -lGL -lglut
+	LDFLAGS = -lGL -lglut -L. -lSOIL
 endif
 
 #######################################################################

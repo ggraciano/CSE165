@@ -8,8 +8,6 @@
 #include <GL/freeglut.h>
 #endif
 
-#include <cmath>
-
 Tools::Tools() {
 
 	x = -0.5;
@@ -17,37 +15,23 @@ Tools::Tools() {
 	w = 0.5;
 	h = 0.5;
 
-	curr = false;
 	write = false;
 
 	color = NONE;
 	tool = none;
 }
 
-Tools::Tools(float x, float y, float w, float h, bool curr, bool write, Color color, Tool tool) {
+Tools::Tools(float x, float y, float w, float h, bool write, Color color, Tool tool) {
 
 	this->x = x;
 	this->y = y;
 	this->w = w;
 	this->h = h;
 
-	this->curr = curr;
 	this->write = write;
 
 	this->color = color;
 	this->tool = tool;
-}
-
-void Tools::setCurr(bool curr) {
-
-	this->curr = curr;
-
-	return;
-}
-
-bool Tools::getCurr() {
-
-	return this->curr;
 }
 
 void Tools::setWrite(bool write) {
@@ -143,7 +127,7 @@ void Tools::display() {
 	}
 
 	glColor3f(fRED, fGREEN, fBLUE);
-	
+
 	glBegin(GL_POLYGON);
 
 	glVertex2f(x, y);
@@ -152,6 +136,48 @@ void Tools::display() {
 	glVertex2f(x, y - h);
 
 	glEnd();
+
+	if (tool == eraser) {
+		const char *str = "Eraser";
+
+		glColor3f(1.0, 1.0, 1.0);
+
+		glRasterPos2f(x + 0.06, y - 0.12);
+
+		for (int i = 0; str[i] != '\0'; i++) {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
+		}
+	} else if (tool == pencil) {
+		const char *str = "Pencil";
+
+		glColor3f(1.0, 1.0, 1.0);
+
+		glRasterPos2f(x + 0.06, y - 0.12);
+
+		for (int i = 0; str[i] != '\0'; i++) {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
+		}
+	} else if (tool == brush) {
+		const char *str = "Brush";
+
+		glColor3f(1.0, 1.0, 1.0);
+
+		glRasterPos2f(x + 0.06, y - 0.12);
+
+		for (int i = 0; str[i] != '\0'; i++) {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
+		}
+	} else if (tool == blank) {
+		const char *str = "Blank";
+
+		glColor3f(1.0, 1.0, 1.0);
+
+		glRasterPos2f(x + 0.06, y - 0.12);
+
+		for (int i = 0; str[i] != '\0'; i++) {
+			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
+		}
+	}
 
 	return;
 }

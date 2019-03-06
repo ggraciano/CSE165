@@ -87,17 +87,17 @@ void appDrawScene() {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	for (int i = 0; i < layout.size(); i++) {
-		layout[i].display();
+	for (std::vector<Tools>::iterator it = layout.begin(); it != layout.end(); ++it) {
+		it->display();
 	}
 
 	glPointSize(5);
 
 	glBegin(GL_POINTS);
 
-	for (int i = 0; i < coord.size(); i++) {
-		glColor3f(coord[i].fRED, coord[i].fGREEN, coord[i].fBLUE);
-		glVertex2f(coord[i].mx, coord[i].my);
+	for (std::vector<Position>::iterator it = coord.begin(); it != coord.end(); ++it) {
+		glColor3f(it->getFRED(), it->getFGREEN(), it->getFBLUE());
+		glVertex2f(it->getMx(), it->getMy());
 	}
 
 	glEnd();
@@ -138,45 +138,13 @@ void appReshapeFunc(int w, int h) {
 	width = w;
 	height = h;
 
-	double scale, center;
-	double winXmin, winXmax, winYmin, winYmax;
-
-	// Define x-axis and y-axis range
-	const double appXmin = -1.0;
-	const double appXmax = 1.0;
-	const double appYmin = -1.0;
-	const double appYmax = 1.0;
-
 	// Define that OpenGL should use the whole window for rendering
-	glViewport(0, 0, w, h);
-
-	// Set up the projection matrix using a orthographic projection that will
-	// maintain the aspect ratio of the scene no matter the aspect ratio of
-	// the window, and also set the min/max coordinates to be the disered ones
-	w = (w == 0) ? 1 : w;
-	h = (h == 0) ? 1 : h;
-
-	if ((appXmax - appXmin) / w < (appYmax - appYmin) / h) {
-		scale = ((appYmax - appYmin) / h) / ((appXmax - appXmin) / w);
-		center = (appXmax + appXmin) / 2;
-		winXmin = center - (center - appXmin)*scale;
-		winXmax = center + (appXmax - center)*scale;
-		winYmin = appYmin;
-		winYmax = appYmax;
-	}
-	else {
-		scale = ((appXmax - appXmin) / w) / ((appYmax - appYmin) / h);
-		center = (appYmax + appYmin) / 2;
-		winYmin = center - (center - appYmin)*scale;
-		winYmax = center + (appYmax - center)*scale;
-		winXmin = appXmin;
-		winXmax = appXmax;
-	}
+	glViewport(0, 0, width, height);
 
 	// Now we use glOrtho to set up our viewing frustum
+	glOrtho(0, width, 0, height, -1.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(winXmin, winXmax, winYmin, winYmax, -1, 1);
 
 	return;
 }
@@ -199,69 +167,52 @@ void appMouseFunc(int b, int s, int x, int y) {
 	windowToScene(mx, my);
 
 	if (b == 0 && s == 0) {
-		for (int i = 0; i < layout.size() - 1; i++) {
-			if (layout[i].getTool() == eraser && layout[i].contains(mx, my)) {
-				std::cout << "eraser" << std::endl;
+	for (std::vector<Tools>::iterator it = layout.begin(); it != layout.end() - 1; ++it) {
+			if (it->getTool() == eraser && it->contains(mx, my)) {
 				tool = eraser;
 				color = WHITE;
-			} else if (layout[i].getTool() == pencil && layout[i].contains(mx, my)) {
-				std::cout << "pencil" << std::endl;
+				currColor();
+			} else if (it->getTool() == pencil && it->contains(mx, my)) {
 				tool = pencil;
 				color = BLACK;
 				currColor();
-			} else if (layout[i].getTool() == brush && layout[i].contains(mx, my)) {
-				std::cout << "brush" << std::endl;
+			} else if (it->getTool() == brush && it->contains(mx, my)) {
 				tool = brush;
 				color = BLACK;
 				currColor();
-			} else if (layout[i].getTool() == line && layout[i].contains(mx, my)) {
-				std::cout << "line" << std::endl;
-				tool = line;
+			} else if (it->getTool() == blank && it->contains(mx, my)) {
+				tool = blank;
 				color = BLACK;
 				currColor();
-			} else if (layout[i].getColor() == BLACK && layout[i].contains(mx, my)) {
-				std::cout << "BLACK" << std::endl;
+			} else if (it->getColor() == BLACK && it->contains(mx, my)) {
 				color = BLACK;
-			} else if (layout[i].getColor() == WHITE && layout[i].contains(mx, my)) {
-				std::cout << "WHITE" << std::endl;
+			} else if (it->getColor() == WHITE && it->contains(mx, my)) {
 				color = WHITE;
-			} else if (layout[i].getColor() == GRAY && layout[i].contains(mx, my)) {
-				std::cout << "GRAY" << std::endl;
+			} else if (it->getColor() == GRAY && it->contains(mx, my)) {
 				color = GRAY;
-			} else if (layout[i].getColor() == LGRAY && layout[i].contains(mx, my)) {
-				std::cout << "LGRAY" << std::endl;
+			} else if (it->getColor() == LGRAY && it->contains(mx, my)) {
 				color = LGRAY;
-			} else if (layout[i].getColor() == RED && layout[i].contains(mx, my)) {
-				std::cout << "RED" << std::endl;
+			} else if (it->getColor() == RED && it->contains(mx, my)) {
 				color = RED;
-			} else if (layout[i].getColor() == LRED && layout[i].contains(mx, my)) {
-				std::cout << "LRED" << std::endl;
+			} else if (it->getColor() == LRED && it->contains(mx, my)) {
 				color = LRED;
-			} else if (layout[i].getColor() == YELLOW && layout[i].contains(mx, my)) {
-				std::cout << "YELLOW" << std::endl;
+			} else if (it->getColor() == YELLOW && it->contains(mx, my)) {
 				color = YELLOW;
-			} else if (layout[i].getColor() == LYELLOW && layout[i].contains(mx, my)) {
-				std::cout << "LYELLOW" << std::endl;
+			} else if (it->getColor() == LYELLOW && it->contains(mx, my)) {
 				color = LYELLOW;
-			} else if (layout[i].getColor() == GREEN && layout[i].contains(mx, my)) {
-				std::cout << "GREEN" << std::endl;
+			} else if (it->getColor() == GREEN && it->contains(mx, my)) {
 				color = GREEN;
-			} else if (layout[i].getColor() == LGREEN && layout[i].contains(mx, my)) {
-				std::cout << "LGREEN" << std::endl;
+			} else if (it->getColor() == LGREEN && it->contains(mx, my)) {
 				color = LGREEN;
-			} else if (layout[i].getColor() == BLUE && layout[i].contains(mx, my)) {
-				std::cout << "BLUE" << std::endl;
+			} else if (it->getColor() == BLUE && it->contains(mx, my)) {
 				color = BLUE;
-			} else if (layout[i].getColor() == LBLUE && layout[i].contains(mx, my)) {
-				std::cout << "LBLUE" << std::endl;
+			} else if (it->getColor() == LBLUE && it->contains(mx, my)) {
 				color = LBLUE;
 			}
 
 			currColor();
 		}
 	}
-
-	std::cout << "x = " << mx << ", y = " << my << std::endl;
 
 	// Redraw the scene by calling appDrawScene above
 	// so that the point we added above will get painted
@@ -283,29 +234,27 @@ void appMotionFunc(int x, int y) {
 
 	windowToScene(mx, my);
 
-	for (int i = 0; i < layout.size(); i++) {
-			if (layout[i].getWrite() && layout[i].contains(mx - 0.04, my + 0.04) && tool == eraser) {
+	for (std::vector<Tools>::iterator it = layout.begin(); it != layout.end(); ++it) {
+			if (it->getWrite() && it->contains(mx + 0.025, my + 0.025) && it->contains(mx - 0.025, my - 0.025) && tool == eraser) {
 				color = WHITE;
 				currColor();
-				coord.push_back(Position(mx, my, fRED, fGREEN, fBLUE));
-				for (float i = 0.005; i <= 0.04; i += 0.005) {
-					coord.push_back(Position(mx - i, my, fRED, fGREEN, fBLUE));
+				for (float i = 0.001; i <= 0.02; i += 0.001) {
 					coord.push_back(Position(mx - i, my + i, fRED, fGREEN, fBLUE));
-					coord.push_back(Position(mx, my + i, fRED, fGREEN, fBLUE));
+					coord.push_back(Position(mx + i, my + i, fRED, fGREEN, fBLUE));
+					coord.push_back(Position(mx - i, my - i, fRED, fGREEN, fBLUE));
+					coord.push_back(Position(mx + i, my - i, fRED, fGREEN, fBLUE));
 				}
-			} else if (layout[i].getWrite() && layout[i].contains(mx, my) && tool == pencil) {
+			} else if (it->getWrite() && it->contains(mx, my) && tool == pencil) {
 				coord.push_back(Position(mx, my, fRED, fGREEN, fBLUE));
-			} else if (layout[i].getWrite() && layout[i].contains(mx - 0.02, my + 0.02) && tool == brush) {
-				coord.push_back(Position(mx, my, fRED, fGREEN, fBLUE));
-				for (float i = 0.005; i <= 0.02; i += 0.005) {
-					coord.push_back(Position(mx - i, my, fRED, fGREEN, fBLUE));
+			} else if (it->getWrite() && it->contains(mx + 0.015, my + 0.015) && it->contains(mx - 0.015, my - 0.015) && tool == brush) {
+				for (float i = 0.001; i <= 0.01; i += 0.001) {
 					coord.push_back(Position(mx - i, my + i, fRED, fGREEN, fBLUE));
-					coord.push_back(Position(mx, my + i, fRED, fGREEN, fBLUE));
+					coord.push_back(Position(mx + i, my + i, fRED, fGREEN, fBLUE));
+					coord.push_back(Position(mx - i, my - i, fRED, fGREEN, fBLUE));
+					coord.push_back(Position(mx + i, my - i, fRED, fGREEN, fBLUE));
 				}
 			}
 	}
-
-	std::cout << "x = " << mx << ", y = " << my << std::endl;
 
 	// Again, we redraw the scene
 	glutPostRedisplay();
@@ -359,33 +308,33 @@ int main(int argc, char** argv) {
 	glEnable(GL_LINE_SMOOTH);
 
 	// Tools
-	layout.push_back(Tools(-0.95, 0.95, 0.22, 0.22, false, false, NONE, eraser));
-	layout.push_back(Tools(-0.71, 0.95, 0.22, 0.22, false, false, NONE, pencil));
+	layout.push_back(Tools(-0.95, 0.95, 0.22, 0.22, false, NONE, eraser));
+	layout.push_back(Tools(-0.71, 0.95, 0.22, 0.22, false, NONE, pencil));
 
-	layout.push_back(Tools(-0.95, 0.71, 0.22, 0.22, false, false, NONE, brush));
-	layout.push_back(Tools(-0.71, 0.71, 0.22, 0.22, false, false, NONE, line));
+	layout.push_back(Tools(-0.95, 0.71, 0.22, 0.22, false, NONE, brush));
+	layout.push_back(Tools(-0.71, 0.71, 0.22, 0.22, false, NONE, blank));
 
 	// Colors
-	layout.push_back(Tools(-0.95, 0.47, 0.22, 0.22, false, false, BLACK, none));
-	layout.push_back(Tools(-0.71, 0.47, 0.22, 0.22, false, false, WHITE, none));
+	layout.push_back(Tools(-0.95, 0.47, 0.22, 0.22, false, BLACK, none));
+	layout.push_back(Tools(-0.71, 0.47, 0.22, 0.22, false, WHITE, none));
 
-	layout.push_back(Tools(-0.95, 0.23, 0.22, 0.22, false, false, GRAY, none));
-	layout.push_back(Tools(-0.71, 0.23, 0.22, 0.22, false, false, LGRAY, none));
+	layout.push_back(Tools(-0.95, 0.23, 0.22, 0.22, false, GRAY, none));
+	layout.push_back(Tools(-0.71, 0.23, 0.22, 0.22, false, LGRAY, none));
 
-	layout.push_back(Tools(-0.95, -0.01, 0.22, 0.22, false, false, RED, none));
-	layout.push_back(Tools(-0.71, -0.01, 0.22, 0.22, false, false, LRED, none));
+	layout.push_back(Tools(-0.95, -0.01, 0.22, 0.22, false, RED, none));
+	layout.push_back(Tools(-0.71, -0.01, 0.22, 0.22, false, LRED, none));
 
-	layout.push_back(Tools(-0.95, -0.25, 0.22, 0.22, false, false, YELLOW, none));
-	layout.push_back(Tools(-0.71, -0.25, 0.22, 0.22, false, false, LYELLOW, none));
+	layout.push_back(Tools(-0.95, -0.25, 0.22, 0.22, false, YELLOW, none));
+	layout.push_back(Tools(-0.71, -0.25, 0.22, 0.22, false, LYELLOW, none));
 
-	layout.push_back(Tools(-0.95, -0.49, 0.22, 0.22, false, false, GREEN, none));
-	layout.push_back(Tools(-0.71, -0.49, 0.22, 0.22, false, false, LGREEN, none));
+	layout.push_back(Tools(-0.95, -0.49, 0.22, 0.22, false, GREEN, none));
+	layout.push_back(Tools(-0.71, -0.49, 0.22, 0.22, false, LGREEN, none));
 
-	layout.push_back(Tools(-0.95, -0.73, 0.22, 0.22, false, false, BLUE, none));
-	layout.push_back(Tools(-0.71, -0.73, 0.22, 0.22, false, false, LBLUE, none));
+	layout.push_back(Tools(-0.95, -0.73, 0.22, 0.22, false, BLUE, none));
+	layout.push_back(Tools(-0.71, -0.73, 0.22, 0.22, false, LBLUE, none));
 
 	// Window
-	layout.push_back(Tools(-0.44, 0.95, 1.39, 1.90, false, true, WHITE, none));
+	layout.push_back(Tools(-0.44, 0.95, 1.39, 1.90, true, WHITE, none));
 
 	// Set callback for drawing the scene
 	glutDisplayFunc(appDrawScene);

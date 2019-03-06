@@ -1,7 +1,10 @@
 #ifndef POSITION_H
 #define POSITION_H
 
-struct Position {
+class Position {
+
+private:
+
 	float mx;
 	float my;
 
@@ -9,23 +12,30 @@ struct Position {
 	float fGREEN;
 	float fBLUE;
 
-	Position() {
-		mx = 0.0;
-		my = 0.0;
+public:
+	Position();
 
-		fRED = 0.0;
-		fGREEN = 0.0;
-		fBLUE = 0.0;
-	}
+	Position(float mx, float my, float fRED, float fGREEN, float fBLUE);
 
-	Position(float mx, float my, float fRED, float fGREEN, float fBLUE) {
-		this->mx = mx;
-		this->my = my;
+	void setMx(float mx);
 
-		this->fRED = fRED;
-		this->fGREEN = fGREEN;
-		this->fBLUE = fBLUE;
-	}
+	float getMx();
+
+	void setMy(float my);
+
+	float getMy();
+
+	void setFRED(float fRED);
+
+	float getFRED();
+
+	void setFGREEN(float fGREEN);
+
+	float getFGREEN();
+
+	void setFBLUE(float fBLUE);
+
+	float getFBLUE();
 };
 
 #endif /* Position.h */
