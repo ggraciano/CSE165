@@ -1,12 +1,6 @@
 #include "Tools.h"
-
-#if defined WIN32
-#include <freeglut.h>
-#elif defined __APPLE__
-#include <GLUT/glut.h>
-#else
 #include <GL/freeglut.h>
-#endif
+#include "SOIL.h"
 
 Tools::Tools() {
 
@@ -19,6 +13,8 @@ Tools::Tools() {
 
 	color = NONE;
 	tool = none;
+
+	texture_id = 0;
 }
 
 Tools::Tools(float x, float y, float w, float h, bool write, Color color, Tool tool) {
@@ -32,6 +28,13 @@ Tools::Tools(float x, float y, float w, float h, bool write, Color color, Tool t
 
 	this->color = color;
 	this->tool = tool;
+
+	texture_id = SOIL_load_OGL_texture (
+		"mspaint4lyfe.png",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
 }
 
 void Tools::setWrite(bool write) {
@@ -85,6 +88,12 @@ void Tools::display() {
 	float fGREEN = 0.0;
 	float fBLUE = 0.0;
 
+	float rows = 6.0;
+	float cols = 8.0;
+
+	float currRow = 0.0;
+	float currCol = 0.0;
+
 	switch (color) {
 		case BLACK:
 			fRED = 0.0; fGREEN = 0.0; fBLUE = 0.0;
@@ -126,57 +135,64 @@ void Tools::display() {
 			break;
 	}
 
-	glColor3f(fRED, fGREEN, fBLUE);
+	glBindTexture(GL_TEXTURE, texture_id);
 
-	glBegin(GL_POLYGON);
-
-	glVertex2f(x, y);
-	glVertex2f(x + w, y);
-	glVertex2f(x + w, y - h);
-	glVertex2f(x, y - h);
-
-	glEnd();
-
-	if (tool == eraser) {
-		const char *str = "Eraser";
+	if (tool != none) {
+		if (tool == eraser) {
+			currRow = 3.0;
+			currCol = 2.0;
+		} else if (tool == pencil) {
+			currRow = 1.0;
+			currCol = 2.0;
+		} else if (tool == brush) {
+			currRow = 1.0;
+			currCol = 3.0;
+		} else if (tool == clear) {
+			currRow = 0.0;
+			currCol = 0.0;
+		}
 
 		glColor3f(1.0, 1.0, 1.0);
 
-		glRasterPos2f(x + 0.06, y - 0.12);
+		glEnable(GL_TEXTURE_2D);
 
-		for (int i = 0; str[i] != '\0'; i++) {
-			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
+		glBegin(GL_POLYGON);
+
+		glTexCoord2f(currCol/cols, (currRow + 1)/rows);
+		glVertex2f(x, y);
+		glTexCoord2f((currCol + 1)/cols, (currRow + 1)/rows);
+		glVertex2f(x + w, y);
+		glTexCoord2f((currCol + 1)/cols, currRow/rows);
+		glVertex2f(x + w, y - h);
+		glTexCoord2f(currCol/cols, currRow/rows);
+		glVertex2f(x, y - h);
+
+		glEnd();
+
+		glDisable(GL_TEXTURE_2D);
+
+		if (tool == clear) {
+			const char *str = "Clear";
+
+			glColor3f(fRED, fGREEN, fBLUE);
+
+			glRasterPos2f(x + 0.045, y - 0.135);
+
+			for (int i = 0; str[i] != '\0'; i++) {
+				glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
+			}
 		}
-	} else if (tool == pencil) {
-		const char *str = "Pencil";
+	} else {
+		glColor3f(fRED, fGREEN, fBLUE);
 
-		glColor3f(1.0, 1.0, 1.0);
+		glBegin(GL_POLYGON);
 
-		glRasterPos2f(x + 0.06, y - 0.12);
+		glVertex2f(x, y);
+		glVertex2f(x + w, y);
+		glVertex2f(x + w, y - h);
+		glVertex2f(x, y - h);
 
-		for (int i = 0; str[i] != '\0'; i++) {
-			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
-		}
-	} else if (tool == brush) {
-		const char *str = "Brush";
-
-		glColor3f(1.0, 1.0, 1.0);
-
-		glRasterPos2f(x + 0.06, y - 0.12);
-
-		for (int i = 0; str[i] != '\0'; i++) {
-			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
-		}
-	} else if (tool == blank) {
-		const char *str = "Blank";
-
-		glColor3f(1.0, 1.0, 1.0);
-
-		glRasterPos2f(x + 0.06, y - 0.12);
-
-		for (int i = 0; str[i] != '\0'; i++) {
-			glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, str[i]);
-		}
+		glEnd();
 	}
 
 	return;

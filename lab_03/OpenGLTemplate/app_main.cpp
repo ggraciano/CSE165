@@ -1,15 +1,7 @@
 #include <iostream>
-#include <cmath>
 #include <vector>
-
-#if defined WIN32
-#include <freeglut.h>
-#elif defined __APPLE__
-#include <GLUT/glut.h>
-#else
 #include <GL/freeglut.h>
-#endif
-
+#include "SOIL.h"
 #include "Tools.h"
 #include "Position.h"
 
@@ -167,7 +159,7 @@ void appMouseFunc(int b, int s, int x, int y) {
 	windowToScene(mx, my);
 
 	if (b == 0 && s == 0) {
-	for (std::vector<Tools>::iterator it = layout.begin(); it != layout.end() - 1; ++it) {
+		for (std::vector<Tools>::iterator it = layout.begin(); it != layout.end() - 1; ++it) {
 			if (it->getTool() == eraser && it->contains(mx, my)) {
 				tool = eraser;
 				color = WHITE;
@@ -180,10 +172,8 @@ void appMouseFunc(int b, int s, int x, int y) {
 				tool = brush;
 				color = BLACK;
 				currColor();
-			} else if (it->getTool() == blank && it->contains(mx, my)) {
-				tool = blank;
-				color = BLACK;
-				currColor();
+			} else if (it->getTool() == clear && it->contains(mx, my)) {
+				coord.clear();
 			} else if (it->getColor() == BLACK && it->contains(mx, my)) {
 				color = BLACK;
 			} else if (it->getColor() == WHITE && it->contains(mx, my)) {
@@ -273,6 +263,8 @@ void appKeyboardFunc(unsigned char key, int x, int y) {
 	
 	switch (key) {
 		case 27:
+			coord.clear();
+			layout.clear();
 			exit(0);
 			break;
 		default:
@@ -312,7 +304,7 @@ int main(int argc, char** argv) {
 	layout.push_back(Tools(-0.71, 0.95, 0.22, 0.22, false, NONE, pencil));
 
 	layout.push_back(Tools(-0.95, 0.71, 0.22, 0.22, false, NONE, brush));
-	layout.push_back(Tools(-0.71, 0.71, 0.22, 0.22, false, NONE, blank));
+	layout.push_back(Tools(-0.71, 0.71, 0.22, 0.22, false, NONE, clear));
 
 	// Colors
 	layout.push_back(Tools(-0.95, 0.47, 0.22, 0.22, false, BLACK, none));

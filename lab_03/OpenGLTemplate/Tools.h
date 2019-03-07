@@ -1,9 +1,11 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
+#include <GL/freeglut.h>
+
 enum Color {NONE, BLACK, WHITE, GRAY, LGRAY, RED, LRED, YELLOW, LYELLOW, GREEN, LGREEN, BLUE, LBLUE};
 
-enum Tool {none, eraser, pencil, brush, blank};
+enum Tool {none, eraser, pencil, brush, clear};
 
 class Tools {
 
@@ -18,6 +20,8 @@ private:
 
 	Color color;
 	Tool tool;
+
+	GLuint texture_id;
 
 public:
 
