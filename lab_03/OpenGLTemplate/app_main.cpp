@@ -263,7 +263,7 @@ void appMotionFunc(int x, int y) {
 //	x, y - coordinates of the mouse when key is pressed
 //-------------------------------------------------------
 void appKeyboardFunc(unsigned char key, int x, int y) {
-	
+
 	switch (key) {
 		case 27:
 			for (std::vector<Position*>::iterator it = coord.begin(); it != coord.end(); ++it) {
@@ -292,7 +292,6 @@ void idle() {
 
 	return;
 }
-
 
 int main(int argc, char** argv) {
 

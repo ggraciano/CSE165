@@ -8,42 +8,36 @@ enum Color {NONE, BLACK, WHITE, GRAY, LGRAY, RED, LRED, YELLOW, LYELLOW, GREEN, 
 enum Tool {none, eraser, pencil, brush, clear};
 
 class Tools {
+	private:
+		float x;
+		float y;
+		float w;
+		float h;
 
-private:
+		bool write;
 
-	float x;
-	float y;
-	float w;
-	float h;
+		Color color;
+		Tool tool;
 
-	bool write;
+		GLuint texture_id;
 
-	Color color;
-	Tool tool;
+	public:
+		Tools();
 
-	GLuint texture_id;
+		Tools(float x, float y, float w, float h, bool write, Color color, Tool tool);
 
-public:
+		void setWrite(bool write);
+		bool getWrite();
 
-	Tools();
+		void setColor(Color color);
+		Color getColor();
 
-	Tools(float x, float y, float w, float h, bool write, Color color, Tool tool);
+		void setTool(Tool tool);
+		Tool getTool();
 
-	void setWrite(bool write);
+		bool contains(float mx, float my);
 
-	bool getWrite();
-
-	void setColor(Color color);
-
-	Color getColor();
-
-	void setTool(Tool tool);
-
-	Tool getTool();
-
-	bool contains(float mx, float my);
-
-	void display();
+		void display();
 };
 
 #endif /* Tools.h */

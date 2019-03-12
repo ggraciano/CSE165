@@ -3,7 +3,6 @@
 #include "SOIL.h"
 
 Tools::Tools() {
-
 	x = -0.5;
 	y = 0.5;
 	w = 0.5;
@@ -18,7 +17,6 @@ Tools::Tools() {
 }
 
 Tools::Tools(float x, float y, float w, float h, bool write, Color color, Tool tool) {
-
 	this->x = x;
 	this->y = y;
 	this->w = w;
@@ -38,52 +36,40 @@ Tools::Tools(float x, float y, float w, float h, bool write, Color color, Tool t
 }
 
 void Tools::setWrite(bool write) {
-
 	this->write = write;
-
 	return;
 }
 
 bool Tools::getWrite() {
-
 	return this->write;
 }
 
 void Tools::setColor(Color color) {
-
 	this->color = color;
-
 	return;
 }
 
 Color Tools::getColor() {
-
 	return this->color;
 }
 
 void Tools::setTool(Tool tool) {
-
 	this->tool = tool;
-
 	return;
 }
 
 Tool Tools::getTool() {
-
 	return this->tool;
 }
 
 bool Tools::contains(float mx, float my) {
-
 	if ((mx > x) && (mx < x + w) && (my < y) && (my > y - h)) {
 		return true;
 	}
-
 	return false;
 }
 
 void Tools::display() {
-
 	float fRED = 0.0;
 	float fGREEN = 0.0;
 	float fBLUE = 0.0;

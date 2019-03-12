@@ -2,40 +2,33 @@
 #define POSITION_H
 
 class Position {
+	private:
+		float mx;
+		float my;
 
-private:
+		float fRED;
+		float fGREEN;
+		float fBLUE;
 
-	float mx;
-	float my;
+	public:
+		Position();
 
-	float fRED;
-	float fGREEN;
-	float fBLUE;
+		Position(float mx, float my, float fRED, float fGREEN, float fBLUE);
 
-public:
-	Position();
+		void setMx(float mx);
+		float getMx();
 
-	Position(float mx, float my, float fRED, float fGREEN, float fBLUE);
+		void setMy(float my);
+		float getMy();
 
-	void setMx(float mx);
+		void setFRED(float fRED);
+		float getFRED();
 
-	float getMx();
+		void setFGREEN(float fGREEN);
+		float getFGREEN();
 
-	void setMy(float my);
-
-	float getMy();
-
-	void setFRED(float fRED);
-
-	float getFRED();
-
-	void setFGREEN(float fGREEN);
-
-	float getFGREEN();
-
-	void setFBLUE(float fBLUE);
-
-	float getFBLUE();
+		void setFBLUE(float fBLUE);
+		float getFBLUE();
 };
 
 #endif /* Position.h */
