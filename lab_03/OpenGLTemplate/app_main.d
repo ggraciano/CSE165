@@ -1,1 +1,1 @@
-app_main.o: app_main.cpp SOIL.h Tools.h Position.h
+app_main.o: app_main.cpp Paint.h Tools.h Position.h
