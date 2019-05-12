@@ -27,7 +27,14 @@ class Game: public AppComponent, private Timer{
 	float missileX;
 	float missileY;
 
+	float rateX;
+	float rateY;
+
+	bool moveLeft;
+	bool moveRight;
+
 	int state;
+	int score;
 
 public:
 
@@ -35,6 +42,8 @@ public:
     
     void draw() const ;
     void handleKeyDown(unsigned char, float, float);
+
+	void handleText(const char*, float, float) const;
     
     void action();
 
