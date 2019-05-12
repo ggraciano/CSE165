@@ -30,8 +30,18 @@ class Game: public AppComponent, private Timer{
 	float rateX;
 	float rateY;
 
+	float leftRange;
+	float rightRange;
+	float topRange;
+	float bottomRange;
+
 	bool moveLeft;
 	bool moveRight;
+
+	int enemyNum;
+
+	int leftCol;
+	int rightCol;
 
 	int state;
 	int score;
@@ -43,7 +53,10 @@ public:
     void draw() const ;
     void handleKeyDown(unsigned char, float, float);
 
-	void handleText(const char*, float, float) const;
+	void handleText(const char*, float, float, void*) const;
+
+	void newGame();
+	void nextLevel();
     
     void action();
 
