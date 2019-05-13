@@ -14,7 +14,104 @@ typedef vector<TexRect*>::const_iterator TexCont;
 
 Game::Game(){
 
-	newGame();
+	// Player
+	player = new TexRect("cannon-small.png", 0.0, -0.9, 0.1, 0.1);
+
+	// Top row		0-10
+	enemy.push_back(new TexRect("invader3-small.png", -0.80, 1.3, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader3-small.png", -0.65, 1.3, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader3-small.png", -0.50, 1.3, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader3-small.png", -0.35, 1.3, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader3-small.png", -0.20, 1.3, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader3-small.png", -0.05, 1.3, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader3-small.png",  0.10, 1.3, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader3-small.png",  0.25, 1.3, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader3-small.png",  0.40, 1.3, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader3-small.png",  0.55, 1.3, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader3-small.png",  0.70, 1.3, 0.1, 0.1));
+
+	// Middle top row	11-21
+	enemy.push_back(new TexRect("invader2-small.png", -0.80, 1.1, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png", -0.65, 1.1, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png", -0.50, 1.1, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png", -0.35, 1.1, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png", -0.20, 1.1, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png", -0.05, 1.1, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png",  0.10, 1.1, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png",  0.25, 1.1, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png",  0.40, 1.1, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png",  0.55, 1.1, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png",  0.70, 1.1, 0.1, 0.1));
+
+	// Middle row		22-32
+	enemy.push_back(new TexRect("invader2-small.png", -0.80, 0.9, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png", -0.65, 0.9, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png", -0.50, 0.9, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png", -0.35, 0.9, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png", -0.20, 0.9, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png", -0.05, 0.9, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png",  0.10, 0.9, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png",  0.25, 0.9, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png",  0.40, 0.9, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png",  0.55, 0.9, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader2-small.png",  0.70, 0.9, 0.1, 0.1));
+
+	// Middle bottom row	33-43
+	enemy.push_back(new TexRect("invader1-small.png", -0.80, 0.7, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png", -0.65, 0.7, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png", -0.50, 0.7, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png", -0.35, 0.7, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png", -0.20, 0.7, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png", -0.05, 0.7, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png",  0.10, 0.7, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png",  0.25, 0.7, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png",  0.40, 0.7, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png",  0.55, 0.7, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png",  0.70, 0.7, 0.1, 0.1));
+
+	// Bottom row		44-54
+	enemy.push_back(new TexRect("invader1-small.png", -0.80, 0.5, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png", -0.65, 0.5, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png", -0.50, 0.5, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png", -0.35, 0.5, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png", -0.20, 0.5, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png", -0.05, 0.5, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png",  0.10, 0.5, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png",  0.25, 0.5, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png",  0.40, 0.5, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png",  0.55, 0.5, 0.1, 0.1));
+	enemy.push_back(new TexRect("invader1-small.png",  0.70, 0.5, 0.1, 0.1));
+
+	for (TexCont it = enemy.begin(); it != enemy.end(); ++it) {
+		enemyVisible.push_back(true);
+	}
+
+
+
+	missileX = 0.0;
+	missileY = 0.0;
+
+	rateX = 0.000025;
+	rateY = 0.01;
+
+	leftRange = -1.00;
+	rightRange = 0.90;
+	topRange = 1.95;
+	bottomRange = -1.85;
+
+	moveLeft = false;
+	moveRight = true;
+
+	enemyNum = 55;
+
+	leftCol = 0;
+	rightCol = 10;
+
+	state = START;
+	score = 0;
+
+	setRate(1);
+	start();
 
 }
 
@@ -98,25 +195,20 @@ void Game::action(){
 			nextLevel();
 		}
 
+		// Check for gameover
+		for (int i = 0; i < enemy.size(); i++) {
+			if (enemyVisible[i] && enemy[i]->contains(player->getX(), player->getY())) {
+				state = GAMEOVER;
+			} else if (enemyVisible[i] && enemy[i]->getY() < -0.9) {
+				state = GAMEOVER;
+			}
+		}
+
 	}
 
 }
 
 void Game::draw() const {
-
-	player->draw(0.0);
-
-	for (int i = 0; i < enemy.size(); i++) {
-		if (enemyVisible[i]) {
-			enemy[i]->draw(0.0);
-		}
-	}
-
-	for (int i = 0; i < missile.size(); i++) {
-		if (missileVisible[i]) {
-			missile[i]->draw();
-		}
-	}
 
 	stringstream ss;
 	ss << score;
@@ -125,8 +217,35 @@ void Game::draw() const {
 
 	const char* text = s.c_str();
 
-	handleText("SCORE: ", leftRange + 0.05, topRange - 0.05, GLUT_BITMAP_HELVETICA_18);
-	handleText(text, leftRange + 0.30, topRange - 0.05, GLUT_BITMAP_HELVETICA_18);
+	if (state == START) {
+
+		player->draw(0.0);
+
+		for (int i = 0; i < enemy.size(); i++) {
+			if (enemyVisible[i]) {
+				enemy[i]->draw(0.0);
+			}
+		}
+
+		for (int i = 0; i < missile.size(); i++) {
+			if (missileVisible[i]) {
+				missile[i]->draw();
+			}
+		}
+
+		handleText("SCORE: ", leftRange + 0.05, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24);
+		handleText(text, leftRange + 0.35, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24);
+	} else if (state == PAUSE) {
+		handleText("PUASED", -0.16, 0.5, GLUT_BITMAP_TIMES_ROMAN_24);
+		handleText("PRESS 'r' TO RESUME", -0.42, 0.0, GLUT_BITMAP_TIMES_ROMAN_24);
+	} else if (state == GAMEOVER) {
+//cout << " game " << endl;
+		handleText("GAMEOVER", -0.23, 0.50, GLUT_BITMAP_TIMES_ROMAN_24);
+		//handleText("SCORE: ", -0.15, 0.30, GLUT_BITMAP_TIMES_ROMAN_24);
+		//handleText(text, 0.15, 0.30, GLUT_BITMAP_TIMES_ROMAN_24);
+//cout << " new game " << endl;
+		handleText("PRESS 'n' TO START A NEW GAME", -0.66, -0.20, GLUT_BITMAP_TIMES_ROMAN_24);
+	}
 
 }
 
@@ -158,10 +277,12 @@ void Game::handleKeyDown(unsigned char key, float x, float y){
 			missile.push_back(new Rect(missileX, missileY, 0.02, 0.03, 1.0, 1.0, 1.0));
 			missileVisible.push_back(true);
 		}
-	} else if ( key == 'p') {
+	} else if (key == 'p' && state == START) {
 		state = PAUSE;
-	} else if (key == 'r') {
+	} else if (key == 'r' && state == PAUSE) {
 		state = START;
+	} else if (key == 'n' && state == GAMEOVER) {
+		newGame();
 	}
 
 }
@@ -175,6 +296,7 @@ void Game::handleText(const char* text, float x, float y, void* font) const{
 		glutBitmapCharacter(font, text[i]);
 		int w = glutBitmapWidth(font, text[i]);
 		offset += ((float)w / 600)*2;
+//cout << offset << endl;
 	}
 
 }
@@ -184,74 +306,31 @@ void Game::newGame() {
 	// Player
 	player = new TexRect("cannon-small.png", 0.0, -0.9, 0.1, 0.1);
 
-	// Top row		0-10
-	enemy.push_back(new TexRect("invader3-small.png", -0.80, 1.3, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader3-small.png", -0.65, 1.3, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader3-small.png", -0.50, 1.3, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader3-small.png", -0.35, 1.3, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader3-small.png", -0.20, 1.3, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader3-small.png", -0.05, 1.3, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader3-small.png",  0.10, 1.3, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader3-small.png",  0.25, 1.3, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader3-small.png",  0.40, 1.3, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader3-small.png",  0.55, 1.3, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader3-small.png",  0.70, 1.3, 0.1, 0.1));
-
-	// Middle top row	11-21
-	enemy.push_back(new TexRect("invader2-small.png", -0.80, 1.1, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png", -0.65, 1.1, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png", -0.50, 1.1, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png", -0.35, 1.1, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png", -0.20, 1.1, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png", -0.05, 1.1, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png",  0.10, 1.1, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png",  0.25, 1.1, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png",  0.40, 1.1, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png",  0.55, 1.1, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png",  0.70, 1.1, 0.1, 0.1));
-
-	// Middle row		22-32
-	enemy.push_back(new TexRect("invader2-small.png", -0.80, 0.9, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png", -0.65, 0.9, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png", -0.50, 0.9, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png", -0.35, 0.9, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png", -0.20, 0.9, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png", -0.05, 0.9, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png",  0.10, 0.9, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png",  0.25, 0.9, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png",  0.40, 0.9, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png",  0.55, 0.9, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader2-small.png",  0.70, 0.9, 0.1, 0.1));
-
-	// Middle bottom row	33-43
-	enemy.push_back(new TexRect("invader1-small.png", -0.80, 0.7, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png", -0.65, 0.7, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png", -0.50, 0.7, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png", -0.35, 0.7, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png", -0.20, 0.7, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png", -0.05, 0.7, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png",  0.10, 0.7, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png",  0.25, 0.7, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png",  0.40, 0.7, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png",  0.55, 0.7, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png",  0.70, 0.7, 0.1, 0.1));
-
-	// Bottom row		44-54
-	enemy.push_back(new TexRect("invader1-small.png", -0.80, 0.5, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png", -0.65, 0.5, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png", -0.50, 0.5, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png", -0.35, 0.5, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png", -0.20, 0.5, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png", -0.05, 0.5, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png",  0.10, 0.5, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png",  0.25, 0.5, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png",  0.40, 0.5, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png",  0.55, 0.5, 0.1, 0.1));
-	enemy.push_back(new TexRect("invader1-small.png",  0.70, 0.5, 0.1, 0.1));
-
-	for (TexCont it = enemy.begin(); it != enemy.end(); ++it) {
-		enemyVisible.push_back(true);
+	for (int i = 0; i < enemy.size()/11; i++) {
+		enemy[11*i +  0]->setX(-0.80); enemy[11*i +  0]->setY(1.3 - (float)i * 0.2);
+		enemy[11*i +  1]->setX(-0.65); enemy[11*i +  1]->setY(1.3 - (float)i * 0.2);
+		enemy[11*i +  2]->setX(-0.50); enemy[11*i +  2]->setY(1.3 - (float)i * 0.2);
+		enemy[11*i +  3]->setX(-0.35); enemy[11*i +  3]->setY(1.3 - (float)i * 0.2);
+		enemy[11*i +  4]->setX(-0.20); enemy[11*i +  4]->setY(1.3 - (float)i * 0.2);
+		enemy[11*i +  5]->setX(-0.05); enemy[11*i +  5]->setY(1.3 - (float)i * 0.2);
+		enemy[11*i +  6]->setX( 0.10); enemy[11*i +  6]->setY(1.3 - (float)i * 0.2);
+		enemy[11*i +  7]->setX( 0.25); enemy[11*i +  7]->setY(1.3 - (float)i * 0.2);
+		enemy[11*i +  8]->setX( 0.40); enemy[11*i +  8]->setY(1.3 - (float)i * 0.2);
+		enemy[11*i +  9]->setX( 0.55); enemy[11*i +  9]->setY(1.3 - (float)i * 0.2);
+		enemy[11*i + 10]->setX( 0.70); enemy[11*i + 10]->setY(1.3 - (float)i * 0.2);
 	}
+
+	for (int i = 0; i < enemyVisible.size(); i++) {
+		enemyVisible[i] = true;
+	}
+
+	moveLeft = false;
+	moveRight = true;
+
+	enemyNum = 55;
+
+	leftCol = 0;
+	rightCol = 10;
 
 	missileX = 0.0;
 	missileY = 0.0;
@@ -274,9 +353,6 @@ void Game::newGame() {
 
 	state = START;
 	score = 0;
-
-	setRate(1);
-	start();
 
 }
 

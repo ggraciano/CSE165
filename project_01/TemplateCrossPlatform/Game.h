@@ -9,7 +9,7 @@
 
 using namespace std;
 
-enum {MENU, PAUSE, START};
+enum {MENU, PAUSE, START, GAMEOVER};
 
 class Game: public AppComponent, private Timer{
 
