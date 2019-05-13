@@ -4,7 +4,7 @@
 App::App(int argc, char** argv, int width, int height, const char* title): GlutApp(argc, argv, width, height, title){
     
     addComponent(new Game());
-    addComponent(new Ad("See the best Android phones. Press 1.", "http://apple.com"));
+//    addComponent(new Ad("See the best Android phones. Press 1.", "http://apple.com"));
     
     fullscreen = false;
 }
@@ -27,6 +27,14 @@ void App::keyDown(unsigned char key, float x, float y){
             (*i)->handleKeyDown(key, x, y);
         }
     }
+}
+
+void App::leftMouseDown(float mx, float my) {
+
+	for (std::vector<AppComponent*>::iterator i = components.begin(); i != components.end(); ++i) {
+            (*i)->handleLeftMouseDown(mx, my);
+        }
+
 }
 
 App::~App(){    

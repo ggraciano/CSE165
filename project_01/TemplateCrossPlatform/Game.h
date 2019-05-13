@@ -9,11 +9,10 @@
 
 using namespace std;
 
-enum {MENU, PAUSE, START, GAMEOVER};
+enum {MENU, CONTROLS, GAMEOVER, PAUSE, SCORES, START};
 
 class Game: public AppComponent, private Timer{
 
-	TexRect* background;
 	TexRect* player;
 
 	vector<Rect*> menu;
@@ -53,7 +52,9 @@ public:
     void draw() const ;
     void handleKeyDown(unsigned char, float, float);
 
-	void handleText(const char*, float, float, void*) const;
+	void handleLeftMouseDown(float, float);
+
+	void handleText(const char*, float, float, void*, float, float, float) const;
 
 	void newGame();
 	void nextLevel();

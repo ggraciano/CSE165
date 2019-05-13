@@ -14,6 +14,11 @@ typedef vector<TexRect*>::const_iterator TexCont;
 
 Game::Game(){
 
+	// Menu
+	menu.push_back(new Rect(-0.5,  0.2, 1.0, 0.2));
+	menu.push_back(new Rect(-0.5, -0.2, 1.0, 0.2));
+	menu.push_back(new Rect(-0.5, -0.6, 1.0, 0.2));
+
 	// Player
 	player = new TexRect("cannon-small.png", 0.0, -0.9, 0.1, 0.1);
 
@@ -107,7 +112,7 @@ Game::Game(){
 	leftCol = 0;
 	rightCol = 10;
 
-	state = START;
+	state = MENU;
 	score = 0;
 
 	setRate(1);
@@ -210,41 +215,52 @@ void Game::action(){
 
 void Game::draw() const {
 
-	stringstream ss;
-	ss << score;
+	if (state == MENU) {
+		handleText("SPACE INVADERS", -0.130, 1.0, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 
-	string s = ss.str();
+		handleText("START", -0.130, 0.075, GLUT_BITMAP_TIMES_ROMAN_24, 0.0, 0.0, 0.0);
+		handleText("SCORES", -0.155, -0.325, GLUT_BITMAP_TIMES_ROMAN_24, 0.0, 0.0, 0.0);
+		handleText("CONTROLS", -0.215, -0.725, GLUT_BITMAP_TIMES_ROMAN_24, 0.0, 0.0, 0.0);
 
-	const char* text = s.c_str();
+		for (int i = 0; i < menu.size(); i++) {
+			menu[i]->draw();
+		}
+	} else {
+		stringstream ss;
+		ss << score;
 
-	if (state == START) {
+		string s = ss.str();
 
-		player->draw(0.0);
+		const char* text = s.c_str();
 
-		for (int i = 0; i < enemy.size(); i++) {
-			if (enemyVisible[i]) {
-				enemy[i]->draw(0.0);
+		if (state == START) {
+
+			player->draw(0.0);
+
+			for (int i = 0; i < enemy.size(); i++) {
+				if (enemyVisible[i]) {
+					enemy[i]->draw(0.0);
+				}
 			}
+
+			for (int i = 0; i < missile.size(); i++) {
+				if (missileVisible[i]) {
+					missile[i]->draw();
+				}
+			}
+
+			handleText("SCORE: ", leftRange + 0.05, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+			handleText(text, leftRange + 0.35, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+		} else if (state == PAUSE) {
+			handleText("PUASED", -0.16, 0.50, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+			handleText("PRESS 'r' TO RESUME", -0.42, 0.0, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+		} else if (state == GAMEOVER) {
+			handleText("GAMEOVER", -0.23, 0.50, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+			handleText("PRESS 'n' TO START A NEW GAME", -0.66, -0.20, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 		}
 
-		for (int i = 0; i < missile.size(); i++) {
-			if (missileVisible[i]) {
-				missile[i]->draw();
-			}
-		}
-
-		handleText("SCORE: ", leftRange + 0.05, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24);
-		handleText(text, leftRange + 0.35, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24);
-	} else if (state == PAUSE) {
-		handleText("PUASED", -0.16, 0.5, GLUT_BITMAP_TIMES_ROMAN_24);
-		handleText("PRESS 'r' TO RESUME", -0.42, 0.0, GLUT_BITMAP_TIMES_ROMAN_24);
-	} else if (state == GAMEOVER) {
-//cout << " game " << endl;
-		handleText("GAMEOVER", -0.23, 0.50, GLUT_BITMAP_TIMES_ROMAN_24);
-		//handleText("SCORE: ", -0.15, 0.30, GLUT_BITMAP_TIMES_ROMAN_24);
-		//handleText(text, 0.15, 0.30, GLUT_BITMAP_TIMES_ROMAN_24);
-//cout << " new game " << endl;
-		handleText("PRESS 'n' TO START A NEW GAME", -0.66, -0.20, GLUT_BITMAP_TIMES_ROMAN_24);
+		handleText("SCORE: ", leftRange + 0.05, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+		handleText(text, leftRange + 0.35, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 	}
 
 }
@@ -264,7 +280,7 @@ void Game::handleKeyDown(unsigned char key, float x, float y){
 	}
 
 
-	if (key == ' ') {
+	if (key == ' ' && state == START) {
 		int last = missile.size() - 1;
 		if (last >= 0 && !missileVisible[last]) {
 			missileX = player->getX() + 0.05;
@@ -287,9 +303,21 @@ void Game::handleKeyDown(unsigned char key, float x, float y){
 
 }
 
-void Game::handleText(const char* text, float x, float y, void* font) const{
+void Game::handleLeftMouseDown(float mx, float my) {
 
-	glColor3f(1.0, 1.0, 1.0);
+	if (menu[0]->contains(mx, my)) {
+		state = START;
+	} else if (menu[1]->contains(mx, my * (float)2)) {
+		state = SCORES;
+	} else if (menu[2]->contains(mx, my * (float)2)) {
+		state = CONTROLS;
+	}
+
+}
+
+void Game::handleText(const char* text, float x, float y, void* font, float r, float g, float b) const {
+
+	glColor3f(r, g, b);
 	float offset = 0;
 	for (int i = 0; i < (int)strlen(text); i++) {
 		glRasterPos2f(x+offset, y);
@@ -397,6 +425,10 @@ Game::~Game(){
 	}
 
 	for (RectCont it = missile.begin(); it != missile.end(); ++it) {
+		delete (*it);
+	}
+
+	for (RectCont it = menu.begin(); it != menu.end(); ++it) {
 		delete (*it);
 	}
 
