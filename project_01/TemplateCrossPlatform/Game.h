@@ -9,13 +9,16 @@
 
 using namespace std;
 
-enum {MENU, CONTROLS, GAMEOVER, PAUSE, SCORES, START};
+enum {MENU, SCORES, CONTROLS, PAUSE, START, GAMEOVER};
 
 class Game: public AppComponent, private Timer{
+
+	TexRect* title;
 
 	TexRect* player;
 
 	vector<Rect*> menu;
+	vector<int> fscore;
 
 	vector<TexRect*> enemy;
 	vector<bool> enemyVisible;
@@ -56,7 +59,10 @@ public:
 
 	void handleText(const char*, float, float, void*, float, float, float) const;
 
-	void newGame();
+	void ifScore();
+	void ofScore();
+
+	void newGame(int);
 	void nextLevel();
     
     void action();
