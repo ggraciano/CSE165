@@ -26,8 +26,14 @@ class Game: public AppComponent, private Timer{
 	vector<Rect*> missile;
 	vector<bool> missileVisible;
 
+	vector<Rect*> enemyMissile;
+	vector<bool> enemyMissileVisible;
+
 	float missileX;
 	float missileY;
+
+	float enemyMissileX;
+	float enemyMissileY;
 
 	float rateX;
 	float rateY;
@@ -40,6 +46,7 @@ class Game: public AppComponent, private Timer{
 	bool moveLeft;
 	bool moveRight;
 
+	int playerNum;
 	int enemyNum;
 
 	int leftCol;
@@ -58,6 +65,8 @@ public:
 	void handleLeftMouseDown(float, float);
 
 	void handleText(const char*, float, float, void*, float, float, float) const;
+
+	bool checkColBelow(int);
 
 	void ifScore();
 	void ofScore();

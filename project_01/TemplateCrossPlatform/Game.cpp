@@ -3,8 +3,8 @@
 #include <iostream>
 
 #include <algorithm>
+#include <cstdlib>
 #include <cstring>
-//#include <string>
 #include <sstream>
 #include <fstream>
 
@@ -111,6 +111,7 @@ Game::Game(){
 	moveLeft = false;
 	moveRight = true;
 
+	playerNum = 1;
 	enemyNum = 55;
 
 	leftCol = 0;
@@ -199,17 +200,55 @@ void Game::action(){
 			}
 		}
 
+		// Enemy shoot handle
+		int thirdLast = enemyMissileVisible.size() - 3;
+		if (thirdLast < 0 || (thirdLast >= 0 && !enemyMissileVisible[thirdLast])) {
+			int r = rand() % 55;
+			if (enemyVisible[r]) {
+				if (r >= 44 && r <= 54) {
+					enemyMissile.push_back(new Rect(enemy[r]->getX() + 0.04,
+									enemy[r]->getY() - 0.10,
+									0.02, 0.03, 1.0, 0.0, 0.0));
+					enemyMissileVisible.push_back(true);
+				} else if (checkColBelow(r)) {
+					enemyMissile.push_back(new Rect(enemy[r]->getX() + 0.04,
+									enemy[r]->getY() - 0.10,
+									0.02, 0.03, 1.0, 0.0, 0.0));
+					enemyMissileVisible.push_back(true);
+				}
+			}
+		}
+
+		// Enemy hit handle
+		for (int i = 0; i < enemyMissile.size(); i++) {
+			if (enemyMissileVisible[i]) {
+				enemyMissile[i]->setY(enemyMissile[i]->getY() - 0.0005);
+				if (player->contains(enemyMissile[i]->getX(), enemyMissile[i]->getY())) {
+					enemyMissileVisible[i] = false;
+					playerNum--;
+					break;
+				} else if (enemyMissile[i]->getY() < -topRange + 0.10) {
+					enemyMissileVisible[i] = false;
+				}
+			}
+		}
+
 		// Check for next level
 		if (enemyNum == 0) {
 			nextLevel();
 		}
 
 		// Check for gameover
-		for (int i = 0; i < enemy.size(); i++) {
-			if (enemyVisible[i] && (enemy[i]->contains(player->getX(), player->getY()) || enemy[i]->getY() < -0.9)) {
-				state = GAMEOVER;
-				ifScore();
-				break;
+		if (playerNum == 0) {
+			state = GAMEOVER;
+			ifScore();
+		} else {
+			for (int i = 0; i < enemy.size(); i++) {
+				if (enemyVisible[i] && (enemy[i]->contains(player->getX(), player->getY()) || enemy[i]->getY() < -0.9)) {
+					state = GAMEOVER;
+					ifScore();
+					break;
+				}
 			}
 		}
 
@@ -218,6 +257,8 @@ void Game::action(){
 }
 
 void Game::draw() const {
+
+	(const_cast<Game*>(this))->ofScore();
 
 	if (state == MENU) {
 
@@ -237,7 +278,7 @@ void Game::draw() const {
 
 		handleText("SCORES", -0.155, 0.75, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 
-		(const_cast<Game*>(this))->ofScore();
+//		(const_cast<Game*>(this))->ofScore();
 
 		stringstream ss;
 
@@ -252,7 +293,7 @@ void Game::draw() const {
 					handleText("1 - ", -0.145,  0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 					handleText(text,   -0.015,  0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 				} else {
-					handleText("1 - 0000", -0.145,  0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+					handleText("1 - 0", -0.145,  0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 				}
 			} else if (i == 1) {
 				if (size > 1) {
@@ -262,7 +303,7 @@ void Game::draw() const {
 					handleText("2 - ", -0.145, -0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 					handleText(text,   -0.015, -0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 				} else {
-					handleText("2 - 0000", -0.145, -0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+					handleText("2 - 0", -0.145, -0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 				}
 			} else if (i == 2) {
 				if (size > 2) {
@@ -272,7 +313,7 @@ void Game::draw() const {
 					handleText("3 - ", -0.145, -0.15, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 					handleText(text,   -0.015, -0.15, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 				} else {
-					handleText("3 - 0000", -0.145, -0.15, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+					handleText("3 - 0", -0.145, -0.15, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 				}
 			} else if (i == 3) {
 				if (size > 3) {
@@ -282,7 +323,7 @@ void Game::draw() const {
 					handleText("4 - ", -0.145, -0.25, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 					handleText(text,   -0.015, -0.25, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 				} else {
-					handleText("4 - 0000", -0.145, -0.25, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+					handleText("4 - 0", -0.145, -0.25, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 				}
 			} else if (i == 4) {
 				if (size > 4) {
@@ -292,7 +333,7 @@ void Game::draw() const {
 					handleText("5 - ", -0.145, -0.35, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 					handleText(text,   -0.015, -0.35, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 				} else {
-					handleText("5 - 0000", -0.145, -0.35, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+					handleText("5 - 0", -0.145, -0.35, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 				}
 			}
 			ss.str(string());
@@ -322,12 +363,26 @@ void Game::draw() const {
 		stringstream ss;
 		ss << score;
 
-		string s = ss.str();
+		string cs = ss.str();
 
 		ss.str(string());
 		ss.clear();
 
-		const char* text = s.c_str();
+		if (fscore.size() == 0) {
+			ss << 0;
+		} else if (score < fscore[0]) {
+			ss << fscore[0];
+		} else {
+			ss << score;
+		}
+
+		string hs = ss.str();
+
+		ss.str(string());
+		ss.clear();
+
+		const char* currScore = cs.c_str();
+		const char* highScore = hs.c_str();
 
 		if (state == START) {
 
@@ -345,6 +400,12 @@ void Game::draw() const {
 				}
 			}
 
+			for (int i = 0; i < enemyMissile.size(); i++) {
+				if (enemyMissileVisible[i]) {
+					enemyMissile[i]->draw();
+				}
+			}
+
 		} else if (state == PAUSE) {
 			handleText("PUASED", -0.16, 0.50, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 
@@ -359,7 +420,10 @@ void Game::draw() const {
 		}
 
 		handleText("SCORE: ", leftRange + 0.05, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
-		handleText(text,      leftRange + 0.35, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+		handleText(currScore, leftRange + 0.35, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+
+		handleText("HIGHSCORE: ", -0.34, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
+		handleText(highScore,      0.18, topRange - 0.05, GLUT_BITMAP_TIMES_ROMAN_24, 1.0, 1.0, 1.0);
 
 	}
 
@@ -383,9 +447,9 @@ void Game::handleKeyDown(unsigned char key, float x, float y){
 	if (key == ' ' && state == START) {
 		int last = missile.size() - 1;
 		if ((last < 0) || (last >= 0 && !missileVisible[last])) {
-			missileX = player->getX() + 0.04;
-			missileY = player->getY() - 0.10;
-			missile.push_back(new Rect(missileX, missileY, 0.02, 0.03, 1.0, 1.0, 1.0));
+			missile.push_back(new Rect(player->getX() + 0.04,
+						player->getY() - 0.10,
+						0.02, 0.03, 1.0, 1.0, 1.0));
 			missileVisible.push_back(true);
 		}
 	} else if (key == 'p' && state == START) {
@@ -428,6 +492,37 @@ void Game::handleText(const char* text, float x, float y, void* font, float r, f
 //cout << offset << endl;
 	}
 
+}
+
+bool Game::checkColBelow(int r) {
+
+	if (r >= 0 && r <= 10) {
+		for (int i = 1; i < 5; i++) {
+			if (enemyVisible[r + 11*i]) {
+				return false;
+			}
+		}
+	} else if (r >= 11 && r <= 21) {
+		for (int i = 1; i < 4; i++) {
+			if (enemyVisible[r + 11*i]) {
+				return false;
+			}
+		}
+	} else if (r >= 22 && r <= 32) {
+		for (int i = 1; i < 3; i++) {
+			if (enemyVisible[r + 11*i]) {
+				return false;
+			}
+		}
+	} else if (r >= 33 && r <= 43) {
+		for (int i = 1; i < 2; i++) {
+			if (enemyVisible[r + 11*i]) {
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
 
 void Game::ifScore() {
@@ -512,6 +607,20 @@ void Game::newGame(int state) {
 		enemyVisible[i] = true;
 	}
 
+	for (RectCont it = missile.begin(); it != missile.end(); ++it) {
+		delete (*it);
+	}
+
+	for (RectCont it = enemyMissile.begin(); it != enemyMissile.end(); ++it) {
+		delete (*it);
+	}
+
+	missile.clear();
+	missileVisible.clear();
+
+	enemyMissile.clear();
+	enemyMissileVisible.clear();
+
 	moveLeft = false;
 	moveRight = true;
 
@@ -534,6 +643,7 @@ void Game::newGame(int state) {
 	moveLeft = false;
 	moveRight = true;
 
+	playerNum = 1;
 	enemyNum = 55;
 
 	leftCol = 0;
@@ -566,6 +676,20 @@ void Game::nextLevel() {
 		enemyVisible[i] = true;
 	}
 
+	for (RectCont it = missile.begin(); it != missile.end(); ++it) {
+		delete (*it);
+	}
+
+	for (RectCont it = enemyMissile.begin(); it != enemyMissile.end(); ++it) {
+		delete (*it);
+	}
+
+	missile.clear();
+	missileVisible.clear();
+
+	enemyMissile.clear();
+	enemyMissileVisible.clear();
+
 	moveLeft = false;
 	moveRight = true;
 
@@ -589,6 +713,10 @@ Game::~Game(){
 	}
 
 	for (RectCont it = missile.begin(); it != missile.end(); ++it) {
+		delete (*it);
+	}
+
+	for (RectCont it = enemyMissile.begin(); it != enemyMissile.end(); ++it) {
 		delete (*it);
 	}
 
